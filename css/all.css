@@ -1,0 +1,179 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+body{
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+.wrap{
+  max-width : 960px;
+  margin: 0 auto;
+  min-height: calc(100vh - (120px));
+}
+
+.header {
+  background-image: url(../img/banner.png);
+  min-height: 350px;
+  background-position: top center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.header h1{
+  color: #fff;
+  text-align: center;  
+  font-size: 32px;
+  margin-bottom: 30px;
+}
+
+.header select{
+  width: 200px;
+  height: 30px;
+  font-size: 18px;  
+}
+
+.content .hotZone{
+  height : 150px;
+  width : 80%;
+  background-color : #fff;
+  box-shadow : 0px 0px 5px rgba(0,0,0,.5);
+  border-radius: 10px;
+  margin: -75px auto 0px;
+}
+
+.hotZone h2{
+  padding: 20px;
+  font-size: 24px;
+}
+
+.BtnGroup{
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+.BtnGroup .hotZoneBtn{
+  margin: 0px 20px;
+  padding: 0;
+  border :0 ;
+  height : 40px ;
+  width: 120px;
+  border-radius: 10px;
+}
+
+.BtnGroup .hotZoneBtn:hover{
+  box-shadow : 0px 0px 3px rgba(0,0,0,.5);
+}
+
+.BtnGroup .hotZoneBtn:focus{
+  outline: 0;
+}
+
+
+
+.content .divider{
+  margin-top: 20px;
+  border-bottom : 3px dashed lightblue;
+  color: lightblue;
+  font-size: 32px;
+  position: relative;
+}
+
+.content .divider i {
+  position: absolute;
+  left : 49%;
+  top : -18px ;
+}
+
+.currentZone{
+  width: 15%;
+  margin : 30px auto 0px;
+  text-align: center;
+  font-size: 32px;
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 10px;
+  background-color: green;
+  position: relative;
+}
+
+.main{
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.main div{
+  width: 45%;
+  height: 270px;
+  box-shadow : 0px 0px 3px rgba(0,0,0,.5);
+  border-radius: 20px;
+}
+
+.footer{
+  margin-top: 20px;
+  background-color: #559AC8 ;
+  height: 100px;
+}
+
+.footer h2,
+.footer h3{
+  text-align: center;
+  padding-top: 20px;
+}
+
+.footer h2{
+  color: #fff;
+}
+
+.footer h3{
+  color: rgba(255, 255, 0, 0.904);
+}
+
