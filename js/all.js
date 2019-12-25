@@ -1535,7 +1535,7 @@ var records = [
   },
   {
   Ticketinfo: "DIY手做教學 200元/人提供用餐服務 150/人",
-  Zone: "高雄市",
+  Zone: "岡山區",
   Px: "120.26704",
   Py: "22.81767",
   Add: "高雄市高雄市岡山區本工一路25號",
@@ -2600,3 +2600,82 @@ var records = [
   Id: "C1_397000000A_000164"
   }
   ]
+// 變數
+var selectZone = document.querySelector('#selectZone');
+var hotZoneArea = document.querySelector('.BtnGroup');
+var hotZoneBtn = document.querySelectorAll('.hotZoneBtn');
+var currentZone = document.querySelector('.currentZone');
+var main = document.querySelector('.main');
+// init
+var getZone = [] ;
+var hotZone = [] ;
+var AllZoneLen = records.length;
+for(var i = 0 ; i < AllZoneLen ; i++){
+  getZone[i] = records[i].Zone;  
+  // console.log(records[i].Zone);  
+}
+getZone = Array.from(new Set(getZone));
+// 利用抓出來的長度賦值
+for(var i = 0 ; i < getZone.length ; i++){
+  hotZone[i] = {count:0,name:''} ;
+}
+// 計算每個區出現次數
+for(var i = 0 ; i < AllZoneLen ; i++){
+  for(var j = 0 ; j < getZone.length ; j++){
+    if(records[i].Zone == getZone[j]){
+      // console.log(hotZone[j]);      
+      hotZone[j].count += 1 ;
+      hotZone[j].name = getZone[j] ;
+    }
+  }
+}
+// 排序出現最多次的zone
+hotZone.sort(function (a, b) {
+  return b.count - a.count;
+});
+// hotZone = 資料中出現前4名多的zone
+hotZone.splice(4,hotZone.length);
+
+// SET SELECT項目
+var str = '<option>----請選擇行政區----</option>' ;
+for(var i = 0 ; i < getZone.length ; i++){
+  str += '<option value = '+ getZone[i] +'>'+getZone[i]+'</option>';
+}
+selectZone.innerHTML = str;
+
+// SET hotZoneBtn
+for(var i = 0 ; i < hotZoneBtn.length ; i++){
+  hotZoneBtn[i].textContent = hotZone[i].name;  
+}
+
+// init end
+
+// 監聽
+hotZoneArea.addEventListener('click',updateInfo);
+selectZone.addEventListener('change',updateInfo);
+
+function updateInfo(e){  
+  var currentSelect = e.target.value || e.target.textContent;
+  if(currentSelect=='----請選擇行政區----'){
+    alert('請選擇有效行政區！');
+    return
+  }
+  // 限制只能點擊button、select
+  if(e.target.nodeName !== 'BUTTON' && e.target.nodeName !== 'SELECT'){return}
+  // 更新現在選擇的zone
+  currentZone.textContent = currentSelect;
+  // 更新infoarea
+  var string = '';
+  for(var i = 0 ; i < AllZoneLen ; i++){
+    if(records[i].Ticketinfo == ''){
+      records[i].Ticketinfo ="無門票資訊";
+    }
+    if (records[i].Zone == currentSelect){
+      string += '<div class="infoarea" data-number='+i+'><div class="picture" style=\"background-image:linear-gradient(transparent, rgba(0,0,0,.3)),url('+records[i].Picture1
+      +')\"><h2>'+records[i].Name+'</h2><h3>'+currentSelect+'</h3></div><div class="info"><p><img src="./img/icons_clock.png">'+
+      records[i].Opentime+'</p><p><img src="./img/icons_pin.png">'+records[i].Add+'</p><p class=\'phone\'><img src="./img/icons_phone.png">'+
+      records[i].Tel+'</p><p class="ticket"><img src="./img/icons_tag.png">'+records[i].Ticketinfo+'</p></div></div>';
+    }
+  }
+  main.innerHTML = string;
+}
