@@ -2606,11 +2606,13 @@ var hotZoneArea = document.querySelector('.BtnGroup');
 var hotZoneBtn = document.querySelectorAll('.hotZoneBtn');
 var currentZone = document.querySelector('.currentZone');
 var main = document.querySelector('.main');
+var PageNumArea = document.querySelector('.PageNumArea');
+var currentPage = 1 ;
 // init
 var getZone = [] ;
 var hotZone = [] ;
-var AllZoneLen = records.length;
-for(var i = 0 ; i < AllZoneLen ; i++){
+var AllDataLen = records.length;
+for(var i = 0 ; i < AllDataLen ; i++){
   getZone[i] = records[i].Zone;  
   // console.log(records[i].Zone);  
 }
@@ -2620,7 +2622,7 @@ for(var i = 0 ; i < getZone.length ; i++){
   hotZone[i] = {count:0,name:''} ;
 }
 // 計算每個區出現次數
-for(var i = 0 ; i < AllZoneLen ; i++){
+for(var i = 0 ; i < AllDataLen ; i++){
   for(var j = 0 ; j < getZone.length ; j++){
     if(records[i].Zone == getZone[j]){
       // console.log(hotZone[j]);      
@@ -2662,20 +2664,154 @@ function updateInfo(e){
   }
   // 限制只能點擊button、select
   if(e.target.nodeName !== 'BUTTON' && e.target.nodeName !== 'SELECT'){return}
+  // 若用hotZone的Button選擇、把select改回預設
+  if(e.target.nodeName =='BUTTON'){
+    selectZone.value = '----請選擇行政區----';
+  }  
   // 更新現在選擇的zone
   currentZone.textContent = currentSelect;
+  
   // 更新infoarea
   var string = '';
-  for(var i = 0 ; i < AllZoneLen ; i++){
+  var countZoneNum = 0;
+  for(var i = 0 ; i < AllDataLen ; i++){
     if(records[i].Ticketinfo == ''){
       records[i].Ticketinfo ="無門票資訊";
     }
-    if (records[i].Zone == currentSelect){
-      string += '<div class="infoarea" data-number='+i+'><div class="picture" style=\"background-image:linear-gradient(transparent, rgba(0,0,0,.3)),url('+records[i].Picture1
+    // 列出當前選擇區域的資料
+    if (records[i].Zone == currentSelect){      
+      string += '<div class="infoarea" data-number='+countZoneNum+'><div class="picture" style=\"background-image:linear-gradient(transparent, rgba(0,0,0,.3)),url('+records[i].Picture1
       +')\"><h2>'+records[i].Name+'</h2><h3>'+currentSelect+'</h3></div><div class="info"><p><img src="./img/icons_clock.png">'+
       records[i].Opentime+'</p><p><img src="./img/icons_pin.png">'+records[i].Add+'</p><p class=\'phone\'><img src="./img/icons_phone.png">'+
       records[i].Tel+'</p><p class="ticket"><img src="./img/icons_tag.png">'+records[i].Ticketinfo+'</p></div></div>';
+      countZoneNum +=1 ;
     }
   }
   main.innerHTML = string;
+  // console.log('countZoneNum:'+countZoneNum);
+  paginationInit(countZoneNum);
 }
+// 頁碼init
+function paginationInit(ZoneNum){
+  // 每產生一次頁碼就重製currentPage
+  currentPage = 1;
+  var OnePageDisplayNum = 6 ;  
+  var SelectZonePageNum = Math.ceil(ZoneNum / OnePageDisplayNum);
+  var infoarea = document.querySelectorAll('.infoarea');
+  // 顯示第一頁，隱藏第一頁之後的結果
+  for(var i = OnePageDisplayNum ; i < ZoneNum ; i++){
+    infoarea[i].setAttribute('style','display : none ;');
+  };
+  // 組頁碼字串
+  var string = '<a href="#" data-pageNum="0">Prev</a>' ;
+  for(var j = 1 ; j <= (SelectZonePageNum) ; j++){
+    string += '<a href="#" data-pageNum="'+j+'">'+j+'</a>';
+  };
+  string += '<a href="#" data-pageNum="-1">Next</a>' ;
+  PageNumArea.innerHTML = string;
+  // 要是結果只有一頁，把next按鈕也禁用
+  if(SelectZonePageNum == 1){
+    var PageNumArea_pageNum = document.querySelectorAll('.PageNumArea a');
+    var getNextNumber = SelectZonePageNum+1; 
+    PageNumArea_pageNum[getNextNumber].setAttribute('style','pointer-events:none;color:#bbb;border-color:#bbb;');
+  }    
+  // console.log(PageNumArea.innerHTML);  
+  // console.log(SelectZonePageNum , RemainderInfo , infoarea);
+}
+
+// 頁碼更換
+function changePage(e){
+  e.preventDefault();
+  if(e.target.nodeName != 'A'){return}
+  var ClickedNum = parseInt(e.target.dataset.pagenum);
+  var infoarea = document.querySelectorAll('.infoarea');
+  var PageNumArea_pageNum = document.querySelectorAll('.PageNumArea a');
+  var OnePageDisplayNum = 6 ; 
+  // 資料長度
+  var ZoneNum = infoarea.length ;
+  // 頁碼長度
+  var AllPageNum = PageNumArea_pageNum.length;
+  // console.log("全部頁碼 :"+AllPageNum);
+  // console.log("現在頁碼 :"+currentPage);
+  var RemainderInfo = ZoneNum % OnePageDisplayNum ;
+
+  // 判斷點選是否為當前頁、最前頁或最後頁
+  if(ClickedNum == 0 && currentPage == 1){
+    PageNumArea_pageNum[0].setAttribute('style','pointer-events: none;color : #bbb;border-color: #bbb;');
+    return
+  }
+  else if(ClickedNum == -1 && currentPage == (AllPageNum - 2)){
+    PageNumArea_pageNum[(AllPageNum - 1)].setAttribute('style','pointer-events: none;color : #bbb;border-color: #bbb;');
+    return
+  }
+  
+  // 先隱藏全部的結果
+  for(var i = 0 ; i < ZoneNum ; i++){
+    infoarea[i].setAttribute('style','display : none ;');
+  };
+  
+  // 先清空所有頁碼樣式
+  for(var i = 0 ; i < AllPageNum ; i++){
+    PageNumArea_pageNum[i].setAttribute('style','color : #7A57D1; border-color: #a696c8;background-color:#fff;pointer-events: auto;');
+  }
+  // 最後一頁不一定整除4，另外渲染 
+  if(ClickedNum == (AllPageNum - 2) && RemainderInfo != 0){
+    currentPage = ClickedNum ;
+    // console.log(currentPage);       
+    for(var i = 0 ; i < RemainderInfo ; i++){    
+      // console.log('最後一頁:'+(ZoneNum-i-1));  
+      infoarea[(ZoneNum-i-1)].setAttribute('style','display:block;');
+    }
+    PageNumArea_pageNum[currentPage].setAttribute('style','pointer-events: none;color: #fff;background-color: #a696c8;');
+  }
+  // 當前點擊不是prev、next、並且點擊 大於 現在在的頁碼
+  if(ClickedNum != 0 && ClickedNum != -1 && ClickedNum > currentPage){
+    currentPage = ClickedNum ;
+    for(var i = 0 ; i < OnePageDisplayNum ; i++){
+      // console.log('點擊大於現在的項目號碼:'+((currentPage*OnePageDisplayNum)-(i+1)));
+      infoarea[((currentPage*OnePageDisplayNum)-(i+1))].setAttribute('style','display:block;');
+    }    
+    PageNumArea_pageNum[currentPage].setAttribute('style','pointer-events: none;color: #fff;background-color: #a696c8;');
+  }
+  // 當前點擊不是prev、next、並且點擊 小於 現在在的頁碼
+  else if(ClickedNum != 0 && ClickedNum != -1 && ClickedNum < currentPage){
+    currentPage = ClickedNum ;
+    for(var i = 0 ; i < OnePageDisplayNum ; i++){
+      
+      // console.log('點擊小於現在的項目號碼:'+((currentPage*OnePageDisplayNum)-(i+1)));
+      infoarea[((currentPage*OnePageDisplayNum)-(i+1))].setAttribute('style','display:block;');
+    }
+    PageNumArea_pageNum[currentPage].setAttribute('style','pointer-events: none;color: #fff;background-color: #a696c8;');
+  }
+  // 點擊prev
+  if(ClickedNum == 0){
+    currentPage -=1 ;
+    for(var i = 0 ; i < OnePageDisplayNum ; i++){
+      // console.log('點擊prev:'+((currentPage*OnePageDisplayNum)-(i+1)));
+      infoarea[((currentPage*OnePageDisplayNum)-(i+1))].setAttribute('style','display:block;');
+    }
+    PageNumArea_pageNum[currentPage].setAttribute('style','pointer-events: none;color: #fff;background-color: #a696c8;');
+  }
+  // 點擊next
+  else if(ClickedNum == -1 && RemainderInfo != 0 && (currentPage+1)==(AllPageNum-2)){
+    currentPage +=1 ;
+    console.log(currentPage);       
+    for(var i = 0 ; i < RemainderInfo ; i++){    
+      // console.log('最後一頁:'+(ZoneNum-i-1));  
+      infoarea[(ZoneNum-i-1)].setAttribute('style','display:block;');
+    }
+    PageNumArea_pageNum[currentPage].setAttribute('style','pointer-events: none;color: #fff;background-color: #a696c8;')
+  }
+  else if (ClickedNum == -1){
+    currentPage +=1 ;
+    for(var i = 0 ; i < OnePageDisplayNum ; i++){
+      // console.log('點擊next:'+((currentPage*OnePageDisplayNum)-(i+1)));
+      infoarea[((currentPage*OnePageDisplayNum)-(i+1))].setAttribute('style','display:block;');
+    }
+    PageNumArea_pageNum[currentPage].setAttribute('style','pointer-events: none;color: #fff;background-color: #a696c8;');
+  }
+  
+  // console.log("點擊後現在頁碼 :"+currentPage);
+}
+// 監聽頁碼更換
+PageNumArea.addEventListener('click',changePage);

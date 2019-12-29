@@ -153,9 +153,9 @@ body{
 
 .currentZone{
   width: 15%;
-  margin : 30px auto 0px;
+  margin : 50px auto 0px;
   text-align: center;
-  font-size: 28px;
+  font-size: 32px;
   color: #fff;
   border: 2px solid #fff;
   border-radius: 10px;
@@ -226,6 +226,40 @@ body{
   position: absolute;
   right: 10px;
   bottom: 10px;
+}
+
+.PageNumArea{
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.PageNumArea a{
+  min-width: 30px;
+  margin: 0px 5px;
+  padding: 10px;
+  display: inline-block;
+  text-decoration: none;
+  color: #7A57D1;
+  border: 1px solid#a696c8;
+  border-radius: 5px;
+}
+
+.PageNumArea a:hover{
+  color: #fff;
+  background-color: #a696c8;
+}
+
+.PageNumArea a:first-child{
+  pointer-events: none;
+  color : #bbb;
+  border-color: #bbb;
+}
+
+.PageNumArea a:nth-child(2){
+  pointer-events: none;
+  color: #fff;
+  background-color: #a696c8;
 }
 
 .footer{
