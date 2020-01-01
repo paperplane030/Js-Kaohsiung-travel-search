@@ -53,31 +53,33 @@ body{
 .wrap{
   max-width : 960px;
   margin: 0 auto;
+  /* 在還沒有資料的時候，讓footer保持在頁面下方 */
   min-height: calc(100vh - (120px));
 }
 
 .header {
-  background-image: url(../img/banner.png);
-  min-height: 350px;
+  background-image: url(../img/banner_\ cut.png);
+  min-height: 380px;
   background-position: top center;
   background-size: cover;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 }
 
 .header h1{
   color: #fff;
   text-align: center;  
-  font-size: 32px;
-  margin-bottom: 30px;
+  font-size: 36px;  
+  margin-top: 20px;
 }
 
-.header select{
+.header select{  
   width: 200px;
-  height: 30px;
-  font-size: 18px;  
+  height: 40px;
+  font-size: 20px;  
+  margin-bottom: 60px;
 }
 
 .content .hotZone{
@@ -106,7 +108,7 @@ body{
   border :0 ;
   height : 40px ;
   width: 120px;
-  font-size: 20px;
+  font-size: 24px;
   font-family: 'Noto Sans TC', sans-serif;
   color: #fff;
   border-radius: 10px;
@@ -153,18 +155,18 @@ body{
 
 .currentZone{
   width: 15%;
-  margin : 30px auto 0px;
+  padding: 10px;
+  margin : 50px auto 0px;
   text-align: center;
-  font-size: 28px;
+  font-size: 32px;
   color: #fff;
   border: 2px solid #fff;
   border-radius: 10px;
   background-color: green;
-  position: relative;
 }
 
 .main{
-  margin-top: 30px;
+  margin-top: 40px;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
@@ -228,11 +230,74 @@ body{
   bottom: 10px;
 }
 
+.PageNumArea{
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.PageNumArea a{
+  min-width: 30px;
+  margin: 0px 5px;
+  padding: 10px;
+  display: inline-block;
+  text-decoration: none;
+  color: #7A57D1;
+  border: 1px solid#a696c8;
+  border-radius: 5px;
+}
+
+.PageNumArea a:hover{
+  color: #fff;
+  background-color: #a696c8;
+}
+
+/* .PageNumArea a:first-child{
+  pointer-events: none;
+  color : #bbb;
+  border-color: #bbb;
+} */
+
+/* .PageNumArea a:nth-child(2){
+  pointer-events: none;
+  color: #fff;
+  background-color: #a696c8;
+} */
+
+.PageNumArea .init{
+  color : #7A57D1;
+  border-color: #a696c8;
+  background-color:#fff;
+  pointer-events: auto;
+}
+
+.PageNumArea .active{
+  pointer-events: none;
+  color: #fff;
+  background-color: #a696c8;
+}
+
+.PageNumArea .disable{
+  pointer-events: none;
+  color : #bbb;
+  border-color: #bbb;
+}
+
+.GoTopBtn a{
+  position: fixed;
+  right : 20% ;
+  bottom : 10%;
+  cursor: pointer;
+  display: none;
+}
+
 .footer{
   margin-top: 20px;
   background-color: #559AC8 ;
   height: 100px;
 }
+
+
 
 .footer h2,
 .footer h3{
